@@ -20,3 +20,7 @@ body {
 #toggleLogin {
     margin-right: 16px;
 }
+
+#loginAlert {
+    display: none;
+}

@@ -27,6 +27,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-danger" id="loginAlert"></div>
                 <form>
                     <input type="hidden" id="loginActive" name="loginActive" value="1">
                     <div class="form-group">
@@ -38,11 +39,11 @@
                         <label for="exampleInputPassword1">Password</label>
                         <input type="password" class="form-control" id="password">
                     </div>
-                    <button type="button" id="loginSignupButton"class="btn btn-primary">Login</button>
                 </form>
             </div>
             <div class="modal-footer">
                 <a id="toggleLogin">Sign Up</a>
+                <button type="button" id="loginSignupButton"class="btn btn-primary">Login</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
             </div>
@@ -79,28 +80,31 @@
 
                 $.ajax({
                     type: "POST",
+                    //dataType : "html",
+                    //contentType: "application/json; charset=utf-8",
                     url: "actions.php?action=loginSignup",
                     data: "email=" + $("#email").val()+ "&password=" + $("#password").val() + "&loginActive=" + $("#loginActive").val(),
                     success: function(result) {
-                        if (result == "1") {
 
-                            window.location.assign("http://http://10twitterclone.test");
+                        if (result == "") {
+                            //alert(result);
+                            //alert("EMPTY");
+                            window.location.assign("index.php");
 
-                        } else {
+                        } else if (result != "") {
 
-                            
-
+                            console.log(result);
+                            $("#loginAlert").html(result).show();
+                            //window.location.assign("index.php");
                         }
-                        alert(result);
+
                     }
+
                 })
 
             })
 
         </script>
-
-
-
 
 
     </body>

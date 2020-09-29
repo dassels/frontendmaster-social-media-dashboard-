@@ -31,8 +31,18 @@
         <a class="nav-link" href="?page=publicprofiles">Public Profiles</a>
       </li>
     </ul>
-    <div class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#exampleModal">Login/Sign Up</button>
+    <div class="form-inline my-2 my-lg-0"> 
+      
+        <?php if (isset($_SESSION['id'])) { ?>
+
+          <a class="btn btn-outline-success my-2 my-sm-0" href="?function=logout">Logout</a>
+
+        <?php } else { ?>
+
+          <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#exampleModal">Login/Sign Up</button>
+
+        <?php } ?>
+
     </div>
   </div>
 </nav>
