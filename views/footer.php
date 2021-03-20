@@ -104,6 +104,26 @@
 
             })
 
+            $(".toggleFollow").click(function() {
+
+                alert($(this).attr("data-userId"));
+
+                $.ajax({
+                    type: "POST",
+                    //dataType : "html",
+                    //contentType: "application/json; charset=utf-8",
+                    url: "actions.php?action=toggleFollow",
+                    data: "userId=" + attr("data-userId"),
+                    success: function(result) {
+
+                            alert(result);
+                            
+
+                    }
+
+                })
+            })
+
         </script>
 
 

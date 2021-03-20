@@ -73,7 +73,7 @@
 
                 echo "<p>".$row['tweet']."</p>";
 
-                echo "<p>Follow</p></div>";
+                echo "<p><a class='toggleFollow' data-userID='".$row['userid']."'>Follow</a></p></div>";
 
             }
 
