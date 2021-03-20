@@ -86,5 +86,28 @@ if ($_GET['action'] == "loginSignup") {
         
 
 }
+    if ($_GET['action'] == 'toggleFollow') {
+
+        //print_r($_POST);
+        $query = "SELECT * FROM isfollowing WHERE follower = ". mysqli_real_escape_string($link, $_SESSION['id'])." AND isFollowing = ".mysqli_real_escape_string($link, $_POST['userId'])." LIMIT 1";
+        $result = mysqli_query($link, $query);
+
+        if (mysqli_num_rows($result) > 0) {
+         
+            $row = mysqli_fetch_assoc($result); 
+
+            mysqli_query($link, "DELETE FROM isfollowing WHERE id = ". mysqli_real_escape_string($link, $row['id'])." LIMIT 1");
+
+            echo "1";
+
+        } else {
+
+            mysqli_query($link, "INSERT INTO isfollowing (follower, isFollowing) VALUES (". mysqli_real_escape_string($link, $_SESSION['id']).", ". mysqli_real_escape_string($link, $_POST['userId']).")");
+
+            echo "2";
+
+        }
+            //$error = "That email address is already taken.";
+    }
 
 ?>

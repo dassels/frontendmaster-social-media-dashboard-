@@ -4,8 +4,16 @@
 
     include("views/header.php");
 
-    include("views/home.php");
+    if (isset($_GET['page']) && ($_GET['page'] == 'timeline')) {
+
+        include("views/timeline.php");
+
+    } else {
+
+        include("views/home.php");
+
+    }
     
-    include("views/footer.php")
+    include("views/footer.php");    
 
 ?>

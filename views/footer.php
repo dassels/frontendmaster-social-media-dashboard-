@@ -106,17 +106,25 @@
 
             $(".toggleFollow").click(function() {
 
-                alert($(this).attr("data-userId"));
+                var id = $(this).attr("data-userId");
 
                 $.ajax({
                     type: "POST",
                     //dataType : "html",
                     //contentType: "application/json; charset=utf-8",
                     url: "actions.php?action=toggleFollow",
-                    data: "userId=" + attr("data-userId"),
+                    data: "userId=" + id,
                     success: function(result) {
 
-                            alert(result);
+                            //alert(result);
+                            if (result == "1") {
+
+                                $("a[data-userId='" + id + "']").html("Follow");
+
+                            } else if (result == "2") {
+
+                                $("a[data-userId='" + id + "']").html("Unfollow");
+                            }
                             
 
                     }

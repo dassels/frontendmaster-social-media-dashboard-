@@ -47,13 +47,28 @@
     function displayTweets($type) {
 
         global $link; // adding global allows function to access variable that is scoped outside of it
+        global $whereClause;
         
         if ($type == 'public') {
             $whereClause = "";
 
+        } else if ($type == 'isfollowing') {
+
+            $query = "SELECT * FROM isfollowing WHERE follower = ". mysqli_real_escape_string($link, $_SESSION['id'])."";
+            $result = mysqli_query($link, $query);
+
+            $whereClause = "";
+    
+            while ($row = mysqli_fetch_assoc($result)) {
+
+                if ($whereClause =="") $whereClause = "WHERE";
+                else $whereClause.= " OR ";
+                $whereClause = " userid = ".$row['isFollowing'];
+            } 
+
         }
 
-        $query = "SELECT * FROM tweets ".$whereClause." ORDER BY `datetime` DESC LIMIT 10";
+        $query = "SELECT * FROM tweets ". $whereClause ." ORDER BY `datetime` DESC LIMIT 10";
 
         $result = mysqli_query($link, $query);
 
@@ -73,7 +88,18 @@
 
                 echo "<p>".$row['tweet']."</p>";
 
-                echo "<p><a class='toggleFollow' data-userID='".$row['userid']."'>Follow</a></p></div>";
+                echo "<p><a class='toggleFollow' data-userID='".$row['userid']."'>";
+
+                $isFollowingQuery = "SELECT * FROM isfollowing WHERE follower = ". mysqli_real_escape_string($link, $_SESSION['id'])." AND isFollowing = ".mysqli_real_escape_string($link, $row['userid'])." LIMIT 1";
+                $isFollowingQueryResult = mysqli_query($link, $isFollowingQuery);
+                if (mysqli_num_rows($isFollowingQueryResult) > 0) {
+
+                    echo "Unfollow";
+                } else {
+                    echo "Follow";
+                }      
+                
+                echo "</a></p></div>";
 
             }
 
