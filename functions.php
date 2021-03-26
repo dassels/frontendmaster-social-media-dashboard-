@@ -21,7 +21,7 @@
 
     }
 
-    function time_since($since) {
+    /*function time_since($since) {
         $chunks = array(
             array(60 * 60 * 24 * 365 , 'year'),
             array(60 * 60 * 24 * 30 , 'month'),
@@ -29,7 +29,7 @@
             array(60 * 60 * 24 , 'day'),
             array(60 * 60 , 'hour'),
             array(60 , 'min'),
-            array(1 , 's')
+            array(1 , 'sec')
         );
     
         for ($i = 0, $j = count($chunks); $i < $j; $i++) {
@@ -42,7 +42,34 @@
     
         $print = ($count == 1) ? '1 '.$name : "$count {$name}s";
         return $print;
+    }*/
+
+    function get_time_ago( $time ) {
+        
+    $time_difference = time() - $time;
+
+    if( $time_difference < 1 ) { return 'less than 1 second ago'; }
+    $condition = array( 12 * 30 * 24 * 60 * 60 =>  'year',
+                30 * 24 * 60 * 60       =>  'month',
+                24 * 60 * 60            =>  'day',
+                60 * 60                 =>  'hour',
+                60                      =>  'minute',
+                1                       =>  'second'
+    );
+
+    foreach( $condition as $secs => $str )
+    {
+        $d = $time_difference / $secs;
+
+        if( $d >= 1 )
+        {
+            $t = round( $d );
+            return 'about ' . $t . ' ' . $str . ( $t > 1 ? 's' : '' ) . ' ago';
+        }
     }
+}
+
+
 
     function displayTweets($type) {
 
@@ -66,6 +93,10 @@
                 $whereClause = " userid = ".$row['isFollowing'];
             } 
 
+        } else if ($type == 'yourtweets') {
+
+            $whereClause = "WHERE userid = ". mysqli_real_escape_string($link, $_SESSION['id']);
+
         }
 
         $query = "SELECT * FROM tweets ". $whereClause ." ORDER BY `datetime` DESC LIMIT 10";
@@ -84,7 +115,7 @@
                 $userQueryResult = mysqli_query($link, $userQuery);
                 $user = mysqli_fetch_assoc($userQueryResult);
 
-                echo "<div class='tweet'><p>".$user['email']." <span class='time'>".time_since(time() -  strtotime($row['datetime']))." ago</span>:</p>";
+                echo "<div class='tweet'><p>".$user['email']." <span class='time'>".get_time_ago(strtotime($row['datetime']))." ago</span>:</p>";
 
                 echo "<p>".$row['tweet']."</p>";
 
@@ -122,10 +153,13 @@
 
         if ($_SESSION['id'] > 0) {
 
-            echo '  <div class="form">
+            echo '<div id="tweetSuccess" class="alert alert-success">Your tweet was posted successfully.</div>
+            <div id="tweetFail" class="alert alert-danger"></div>  
+            <div class="form">
             <div class="textbox"><label for="textarea">Post a tweet</label>
-            <textarea class="form-control" id="textarea" rows="3"></textarea></div>
-            <button class="btn btn-primary mb-2">Post Tweet</button>
+            <textarea class="form-control" id="tweetContent" rows="3"></textarea>
+            </div>
+            <button id="postTweetButton" class="btn btn-primary mb-2">Post Tweet</button>
             </div>';
 
         } else { echo 'please log in';}

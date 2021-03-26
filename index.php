@@ -8,6 +8,10 @@
 
         include("views/timeline.php");
 
+    } else if (isset($_GET['page']) && ($_GET['page'] == 'yourtweets')) {
+
+        include("views/yourtweets.php");
+
     } else {
 
         include("views/home.php");

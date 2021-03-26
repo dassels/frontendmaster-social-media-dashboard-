@@ -132,6 +132,37 @@
                 })
             })
 
+            $("#postTweetButton").click(function() {
+
+                //alert($("#tweetContent").val());
+                $.ajax({
+                    type: "POST",
+                    //dataType : "html",
+                    //contentType: "application/json; charset=utf-8",
+                    url: "actions.php?action=postTweet",
+                    data: "tweetContent=" + $("#tweetContent").val(),
+                    success: function(result) {
+
+                            if (result == "1") {
+
+                                $("#tweetSuccess").show();
+                                $("#tweetFail").hide();
+
+                            } else if (result != "") {
+
+                                $("#tweetFail").html(result).show();
+                                $("#tweetSuccess").hide();
+
+                            };
+                        
+                            
+
+                    }
+
+                })
+
+            })
+
         </script>
 
 
