@@ -12,6 +12,14 @@
 
         include("views/yourtweets.php");
 
+    } else if (isset($_GET['page']) && ($_GET['page'] == 'search')) {
+
+        include("views/search.php");
+
+    } else if (isset($_GET['page']) && ($_GET['page'] == 'publicprofiles')) {
+
+        include("views/publicprofiles.php");
+
     } else {
 
         include("views/home.php");

@@ -97,7 +97,25 @@
 
             $whereClause = "WHERE userid = ". mysqli_real_escape_string($link, $_SESSION['id']);
 
+        } else if ($type == 'search') {
+
+            echo "<p>Showing results for '". mysqli_real_escape_string($link, $_GET['q'])."':</p>";
+
+            $whereClause = "WHERE tweet LIKE '%". mysqli_real_escape_string($link, $_GET['q'])."%'";
+
+        } else if (is_numeric($type)) {
+
+            $userQuery = "SELECT * FROM users WHERE id = ".mysqli_real_escape_string($link, $type)." LIMIT 1";
+            $userQueryResult = mysqli_query($link, $userQuery);
+            $user = mysqli_fetch_assoc($userQueryResult);
+
+            echo "<h2>". mysqli_real_escape_string($link, $user['email'])."'s tweets</h2>";
+
+            $whereClause = "WHERE userid = ". mysqli_real_escape_string($link, $type);
+
+
         }
+
 
         $query = "SELECT * FROM tweets ". $whereClause ." ORDER BY `datetime` DESC LIMIT 10";
 
@@ -115,7 +133,7 @@
                 $userQueryResult = mysqli_query($link, $userQuery);
                 $user = mysqli_fetch_assoc($userQueryResult);
 
-                echo "<div class='tweet'><p>".$user['email']." <span class='time'>".get_time_ago(strtotime($row['datetime']))." ago</span>:</p>";
+                echo "<div class='tweet'><p><a href='?page=publicprofiles&userid=".$user['id']."'>" .$user['email']. "</a><span class='time'>".get_time_ago(strtotime($row['datetime']))." ago</span>:</p>";
 
                 echo "<p>".$row['tweet']."</p>";
 
@@ -141,11 +159,12 @@
 
     function displaySearch() {
 
-        echo '<div class="form-inline">
+        echo '<form class="form-inline">
         <label class="sr-only" for="inlineFormInputName2">Search</label>
-        <input type="text" class="form-control mb-2 mr-sm-2" id="search" placeholder="Search">           
-        <button class="btn btn-primary mb-2">Search Tweets</button>
-        </div>';
+        <input type="hidden" name="page" value="search">
+        <input type="text" name="q" class="form-control mb-2 mr-sm-2" id="search" placeholder="Search">           
+        <button type="submit" class="btn btn-primary mb-2">Search Tweets</button>
+        </form>';
 
     }
 
@@ -163,6 +182,21 @@
             </div>';
 
         } else { echo 'please log in';}
+
+    }
+
+    function displayUsers() {
+
+        global $link;
+
+        $query = "SELECT * FROM users LIMIT 10";
+
+        $result = mysqli_query($link, $query);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+
+                echo  "<p><a href='?page=publicprofiles&userid=".$row['id']."'>".$row['email']."</a></p>";
+            }
 
     }
 
